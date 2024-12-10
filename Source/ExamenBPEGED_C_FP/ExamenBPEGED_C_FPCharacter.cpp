@@ -106,15 +106,22 @@ void AExamenBPEGED_C_FPCharacter::Interact()
 	FHitResult HitResult;
 	FVector StartLocation = FirstPersonCameraComponent->GetComponentLocation();
 	FVector EndLocation = StartLocation + FirstPersonCameraComponent->GetForwardVector() * InteractLineTraceLength;
-	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
+	bool hasCollision = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
 
+	if(!hasCollision || HitResult.GetActor() == nullptr)
+		return;
+
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow,
+	"Interacting " + HitResult.GetActor()->GetName());
+	}
+    
 	ADoorActor* Door = Cast<ADoorActor>(HitResult.GetActor());
-
-	
-	Door->PlayerHasKey = KeyCount == 11;
-	Door->PlayerNotHasNotKey = NotKeyCount == 0;
 	if (Door)
 	{
+		Door->PlayerHasKey = KeyCount == 11;
+		Door->PlayerNotHasNotKey = NotKeyCount == 0;
 		Door-> OnInteract();
 	}
 }

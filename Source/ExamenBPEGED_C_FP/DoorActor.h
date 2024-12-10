@@ -46,7 +46,7 @@ protected:
 	bool bIsDoorClosed = true;
 	
 	UPROPERTY(EditAnywhere)
-	float DoorRotateAngle = 90.f;
+	float DoorRotateAngle = 110.f;
 
 	UFUNCTION()
 	void OpenDoor(float Value); //bind Function
